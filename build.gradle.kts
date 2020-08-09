@@ -1,12 +1,12 @@
 plugins {
-    kotlin("jvm") version "1.3.71"
-    kotlin("plugin.serialization") version "1.3.71"
+    kotlin("jvm") version "1.3.72"
+    kotlin("plugin.serialization") version "1.3.72"
     java
     id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
 group = "yyuueexxiinngg"
-version = "0.1.9"
+version = "0.2.0"
 
 repositories {
     maven(url = "https://mirrors.huaweicloud.com/repository/maven")
@@ -18,9 +18,10 @@ repositories {
 val miraiCoreVersion: String by rootProject.ext
 val miraiConsoleVersion: String by rootProject.ext
 val ktorVersion: String by rootProject.ext
-val kotlinVersion = "1.3.71"
+val kotlinVersion = "1.3.72"
 
 fun ktor(id: String, version: String = this@Build_gradle.ktorVersion) = "io.ktor:ktor-$id:$version"
+fun kotlinx(id: String, version: String) = "org.jetbrains.kotlinx:kotlinx-$id:$version"
 
 dependencies {
     compileOnly(kotlin("stdlib-jdk8"))
@@ -56,6 +57,7 @@ tasks {
 
     val runMiraiConsole by creating(JavaExec::class.java) {
         group = "mirai"
+        main = "mirai.RunMirai"
         dependsOn(shadowJar)
         dependsOn(testClasses)
 
@@ -91,7 +93,6 @@ tasks {
             copyBuildOutput()
 
             classpath = sourceSets["test"].runtimeClasspath
-            main = "mirai.RunMirai"
             standardInput = System.`in`
             args(miraiCoreVersion, miraiConsoleVersion)
         }
